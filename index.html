@@ -1,0 +1,1573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ToonTown Corporate Clash - Drop Tracker</title>
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #4F46E5;
+            --secondary-color: #10B981;
+            --accent-color: #F59E0B;
+            --danger-color: #EF4444;
+            --background: #F8FAFC;
+            --surface: #FFFFFF;
+            --text-primary: #1F2937;
+            --text-secondary: #6B7280;
+            --text-muted: #9CA3AF;
+            --border-color: #E5E7EB;
+            --shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+            --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Quicksand', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 2rem 1rem;
+            line-height: 1.6;
+            color: var(--text-primary);
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: var(--surface);
+            border-radius: 20px;
+            padding: 2rem;
+            box-shadow: var(--shadow-lg);
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+            letter-spacing: -0.025em;
+        }
+
+        .header .subtitle {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .search-box {
+            width: 100%;
+            padding: 1rem 1.5rem;
+            border: 2px solid var(--border-color);
+            border-radius: 50px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: var(--surface);
+            transition: all 0.2s ease;
+            margin-bottom: 2rem;
+        }
+
+        .search-box:focus {
+            outline: none;
+            border-color: var(--primary-color);
+            box-shadow: 0 0 0 3px rgba(79, 70, 229, 0.1);
+        }
+
+        .controls {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .btn {
+            padding: 0.75rem 1.5rem;
+            border: none;
+            border-radius: 50px;
+            font-family: inherit;
+            font-size: 0.9rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .btn-primary {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background: #4338CA;
+            transform: translateY(-1px);
+        }
+
+        .btn-secondary {
+            background: var(--danger-color);
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background: #DC2626;
+            transform: translateY(-1px);
+        }
+
+        .btn-info {
+            background: var(--secondary-color);
+            color: white;
+        }
+
+        .btn-info:hover {
+            background: #059669;
+            transform: translateY(-1px);
+        }
+
+        .progress {
+            background: linear-gradient(135deg, var(--primary-color), #7C3AED);
+            color: white;
+            padding: 1.5rem;
+            border-radius: 16px;
+            text-align: center;
+            margin-bottom: 2rem;
+            box-shadow: var(--shadow);
+        }
+
+        .progress .main-progress {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .progress .breakdown {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            font-weight: 400;
+        }
+
+        .category {
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            margin-bottom: 1.5rem;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+        }
+
+        .category-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1.5rem;
+            border-bottom: 1px solid var(--border-color);
+            cursor: pointer;
+            transition: background-color 0.2s ease;
+            user-select: none;
+        }
+
+        .category-header:hover {
+            background-color: var(--background);
+        }
+
+        .category-header-left {
+            display: flex;
+            align-items: center;
+            gap: 1rem;
+        }
+
+        .category-header h2 {
+            font-size: 1.4rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin: 0;
+        }
+
+        .category-progress {
+            background: var(--background);
+            color: var(--text-secondary);
+            padding: 0.25rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.85rem;
+            font-weight: 500;
+        }
+
+        .dropdown-arrow {
+            width: 24px;
+            height: 24px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text-secondary);
+            transition: transform 0.2s ease;
+            font-size: 1.2rem;
+            font-weight: bold;
+        }
+
+        .category.collapsed .dropdown-arrow {
+            transform: rotate(-90deg);
+        }
+
+        .category-content {
+            padding: 1.5rem;
+            transition: all 0.3s ease;
+            max-height: none;
+            opacity: 1;
+        }
+
+        .category.collapsed .category-content {
+            max-height: 0;
+            padding: 0 1.5rem;
+            opacity: 0;
+            overflow: hidden;
+        }
+
+        .drop-item {
+            display: flex;
+            align-items: center;
+            padding: 1rem;
+            margin-bottom: 0.75rem;
+            border-radius: 12px;
+            background: var(--surface);
+            border: 1px solid var(--border-color);
+            transition: all 0.2s ease;
+        }
+
+        .drop-item:hover {
+            border-color: var(--primary-color);
+            transform: translateY(-1px);
+            box-shadow: var(--shadow);
+        }
+
+        .drop-item.completed {
+            opacity: 0.6;
+            background: var(--background);
+        }
+
+        .drop-item.completed .item-name {
+            text-decoration: line-through;
+        }
+
+        .drop-item input[type="checkbox"] {
+            width: 1.25rem;
+            height: 1.25rem;
+            margin-right: 1rem;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        .item-image {
+            width: 50px;
+            height: 50px;
+            object-fit: contain;
+            margin-right: 1rem;
+            border-radius: 8px;
+            background: var(--background);
+            padding: 4px;
+            flex-shrink: 0;
+        }
+
+        .item-details {
+            flex-grow: 1;
+            min-width: 0;
+        }
+
+        .item-name {
+            font-weight: 600;
+            font-size: 0.95rem;
+            margin-bottom: 0.25rem;
+            color: var(--text-primary);
+        }
+
+        .item-source {
+            font-size: 0.8rem;
+            color: var(--text-secondary);
+            font-weight: 400;
+        }
+
+        .rarity-badge {
+            padding: 0.35rem 0.75rem;
+            border-radius: 50px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.025em;
+            margin-left: 1rem;
+            flex-shrink: 0;
+        }
+
+        .guaranteed {
+            background: #DCFCE7;
+            color: #166534;
+        }
+
+        .very-rare {
+            background: #F3E8FF;
+            color: #7C2D92;
+        }
+
+        .legendary {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+
+        .uncommon {
+            background: #DBEAFE;
+            color: #1E40AF;
+        }
+
+        .defeats {
+            background: #FEE2E2;
+            color: #991B1B;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 1rem;
+            }
+
+            .container {
+                padding: 1.5rem;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .controls {
+                justify-content: stretch;
+            }
+
+            .btn {
+                flex: 1;
+                justify-content: center;
+            }
+
+            .drop-item {
+                flex-direction: column;
+                align-items: flex-start;
+                text-align: left;
+                gap: 0.75rem;
+            }
+
+            .drop-item input[type="checkbox"] {
+                margin-right: 0;
+            }
+
+            .item-image {
+                margin-right: 0;
+            }
+
+            .rarity-badge {
+                margin-left: 0;
+                align-self: flex-start;
+            }
+
+            .category-header {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .category-header-left {
+                width: 100%;
+                justify-content: space-between;
+            }
+        }
+
+        /* Smooth animations */
+        * {
+            transition: opacity 0.2s ease, transform 0.2s ease;
+        }
+
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--background);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--text-muted);
+            border-radius: 4px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--text-secondary);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>ToonTown Corporate Clash</h1>
+            <p class="subtitle">Complete Drop Tracker</p>
+        </div>
+        
+        <input type="text" id="searchBox" class="search-box" placeholder="Search for drops, managers, or item types...">
+        
+        <div class="controls">
+            <button class="btn btn-primary" onclick="exportProgress()">📄 Export Progress</button>
+            <button class="btn btn-secondary" onclick="importProgress()">📁 Import Progress</button>
+            <button class="btn btn-info" onclick="resetProgress()">🔄 Reset All</button>
+        </div>
+        
+        <div class="progress" id="progressDisplay">
+            <div class="main-progress">Loading...</div>
+        </div>
+
+        <!-- Duck Shuffler Makeship Set -->
+        <div class="category" data-category="makeship">
+            <div class="category-header" onclick="toggleCategory('makeship')">
+                <div class="category-header-left">
+                    <h2>🦆 Duck Shuffler Makeship Set</h2>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <span class="category-progress" id="makeship-progress">0/14</span>
+            </div>
+            <div class="category-content">
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_green_nameplate">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/9/93/GreenDuckShufflerNameplate.png/250px-GreenDuckShufflerNameplate.png?86de4d" alt="Green Duck Shuffler Nameplate" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Green Duck Shuffler Nameplate</div>
+                        <div class="item-source">Profile Nameplate • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_red_nameplate">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/8/83/RedDuckShufflerNameplate.png/250px-RedDuckShufflerNameplate.png?8e70cc" alt="Red Shuffler Sticker Nameplate" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Red Shuffler Sticker Nameplate</div>
+                        <div class="item-source">Profile Nameplate • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_bg">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/2/21/DuckShufflerBackground.png/250px-DuckShufflerBackground.png?e7bb00" alt="Duck Shuffler Background" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Background</div>
+                        <div class="item-source">Profile Background • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_excited_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/a/aa/Excited_Duck_Shuffler_Sticker.png/250px-Excited_Duck_Shuffler_Sticker.png?3737f4" alt="Excited Duck Shuffler Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Excited Duck Shuffler Sticker</div>
+                        <div class="item-source">Sticker • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_superstar_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/d/d4/Superstar_Duck_Shuffler_Sticker.png/250px-Superstar_Duck_Shuffler_Sticker.png?d67410" alt="Superstar Duck Shuffler Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Superstar Duck Shuffler Sticker</div>
+                        <div class="item-source">Sticker • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_gloomy_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/a/a9/Gloomy_Duck_Shuffler_Sticker.png/250px-Gloomy_Duck_Shuffler_Sticker.png?9110e0" alt="Gloomy Duck Shuffler Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Gloomy Duck Shuffler Sticker</div>
+                        <div class="item-source">Sticker • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_bored_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/b/b0/Bored_Duck_Shuffler_Sticker.png/250px-Bored_Duck_Shuffler_Sticker.png?9b7214" alt="Bored Duck Shuffler Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Bored Duck Shuffler Sticker</div>
+                        <div class="item-source">Sticker • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/9/9a/Duck_Shuffler_Hat.png/250px-Duck_Shuffler_Hat.png?de9221" alt="Duck Shuffler Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Hat</div>
+                        <div class="item-source">Hat • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_visor">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/7/79/Duck_Shuffler_Visor.png/250px-Duck_Shuffler_Visor.png?452beb" alt="Duck Shuffler Visor" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Visor</div>
+                        <div class="item-source">Glasses • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_shirt">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/6/69/Duck_Shuffler_Shirt.png/250px-Duck_Shuffler_Shirt.png?42c449" alt="Duck Shuffler Shirt" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Shirt</div>
+                        <div class="item-source">Shirt • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_backpack">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/e/ee/Duck_Shuffler_Backpack.png/250px-Duck_Shuffler_Backpack.png?f9eadf" alt="Duck Shuffler Backpack" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Backpack</div>
+                        <div class="item-source">Backpack • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_shorts">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/4/4a/Duck_Shuffler_Shorts.png/250px-Duck_Shuffler_Shorts.png?e532c6" alt="Duck Shuffler Shorts" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Shorts</div>
+                        <div class="item-source">Shorts • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_skirt">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/9/93/Duck_Shuffler_Skirt.png/250px-Duck_Shuffler_Skirt.png?bf8bf6" alt="Duck Shuffler Skirt" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Skirt</div>
+                        <div class="item-source">Skirt • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_shoes">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/3/30/Duck_Shuffler_Shoes.png/250px-Duck_Shuffler_Shoes.png?526980" alt="Duck Shuffler Shoes" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Shoes</div>
+                        <div class="item-source">Shoes • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge guaranteed">Guaranteed</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Street Manager Loot -->
+        <div class="category" data-category="street">
+            <div class="category-header" onclick="toggleCategory('street')">
+                <div class="category-header-left">
+                    <h2>🏢 Street Manager Loot</h2>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <span class="category-progress" id="street-progress">0/19</span>
+            </div>
+            <div class="category-content">
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shuffler_sticker_rare">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/7/7f/DuckShufflerSticker.png/250px-DuckShufflerSticker.png?c23142" alt="Duck Shuffler Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Duck Shuffler Sticker</div>
+                        <div class="item-source">Sticker • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_money_bag">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/8/8d/MoneyBagBackpack.png/250px-MoneyBagBackpack.png?560a9f" alt="Money Bag" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Money Bag</div>
+                        <div class="item-source">Backpack • Duck Shuffler</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_deep_diver_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/6/69/DeepDiverSticker.png/250px-DeepDiverSticker.png?aee284" alt="Deep Diver Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Deep Diver Sticker</div>
+                        <div class="item-source">Sticker • Deep Diver</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_diver_boots">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/7/7f/DiverBoots.png/250px-DiverBoots.png?435e0c" alt="Diver Boots" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Diver Boots</div>
+                        <div class="item-source">Shoes • Deep Diver</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_gatekeeper_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/f/ff/GatekeeperSticker.png/250px-GatekeeperSticker.png?90b2c2" alt="Gatekeeper Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Gatekeeper Sticker</div>
+                        <div class="item-source">Sticker • Gatekeeper</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shield">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/c/cf/Shield.png/250px-Shield.png?16f22b" alt="Shield" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Shield</div>
+                        <div class="item-source">Backpack • Gatekeeper</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_armored_outfit">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/4/41/ArmoredOutfit.png/250px-ArmoredOutfit.png?458404" alt="Armored Outfit" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Armored Outfit</div>
+                        <div class="item-source">Outfit • Gatekeeper</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_armored_greaves">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/3/39/ArmoredGreaves.png/250px-ArmoredGreaves.png?252781" alt="Armored Greaves" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Armored Greaves</div>
+                        <div class="item-source">Shoes • Gatekeeper</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_bellringer_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/7/78/BellringerSticker.png/250px-BellringerSticker.png?20ed47" alt="Bellringer Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Bellringer Sticker</div>
+                        <div class="item-source">Sticker • Bellringer</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_cowbell">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/3/38/Cowbell.png/250px-Cowbell.png?850223" alt="Cowbell" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Cowbell</div>
+                        <div class="item-source">Backpack • Bellringer</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_mouthpiece_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/2/2e/MouthpieceSticker.png/250px-MouthpieceSticker.png?5ecd27" alt="Mouthpiece Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Mouthpiece Sticker</div>
+                        <div class="item-source">Sticker • Mouthpiece</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_mouthpiece_glasses">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/6/67/Mouthpiece_Glasses.png/250px-Mouthpiece_Glasses.png?222fc2" alt="Mouthpiece's Glasses" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Mouthpiece's Glasses</div>
+                        <div class="item-source">Glasses • Mouthpiece</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_firestarter_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/d/de/FirestarterSticker.png/250px-FirestarterSticker.png?c1e1c0" alt="Firestarter Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Firestarter Sticker</div>
+                        <div class="item-source">Sticker • Firestarter</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_firestarter_helmet">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/1/1a/FirestarterHelmet.gif/250px-FirestarterHelmet.gif?c04bd1" alt="Firestarter Helmet" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Firestarter Helmet</div>
+                        <div class="item-source">Hat • Firestarter</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_firestoker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/8/80/Firestoker.png/250px-Firestoker.png?a7ae6a" alt="Firestoker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Firestoker</div>
+                        <div class="item-source">Backpack • Firestarter</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_treekiller_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/5/53/TreekillerSticker.png/250px-TreekillerSticker.png?ed5a67" alt="Treekiller Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Treekiller Sticker</div>
+                        <div class="item-source">Sticker • Treekiller</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_stump_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/5/5e/StumpHat.png/250px-StumpHat.png?fca434" alt="Stump Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Stump Hat</div>
+                        <div class="item-source">Hat • Treekiller</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_featherbedder_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/0/09/FeatherbedderSticker.png/250px-FeatherbedderSticker.png?28a0c7" alt="Featherbedder Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Featherbedder Sticker</div>
+                        <div class="item-source">Sticker • Featherbedder</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_feather_unibrow">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/1/1b/FeatherUnibrow.png/250px-FeatherUnibrow.png?5c4d66" alt="Feather Unibrow" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Feather Unibrow</div>
+                        <div class="item-source">Hat • Featherbedder</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Kudos Manager Loot -->
+        <div class="category" data-category="kudos">
+            <div class="category-header" onclick="toggleCategory('kudos')">
+                <div class="category-header-left">
+                    <h2>⭐ Kudos Manager Loot</h2>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <span class="category-progress" id="kudos-progress">0/19</span>
+            </div>
+            <div class="category-content">
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_prethinker_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/a/a9/PrethinkerSticker.png/250px-PrethinkerSticker.png?692fe2" alt="Prethinker Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Prethinker Sticker</div>
+                        <div class="item-source">Sticker • Prethinker</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_smart_cap">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/0/04/Smart_Cap.png/250px-Smart_Cap.png?92935a" alt="Smart Cap" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Smart Cap</div>
+                        <div class="item-source">Hat • Prethinker</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_rainmaker_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/e/e0/RainmakerSticker.png/250px-RainmakerSticker.png?734c14" alt="Rainmaker Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Rainmaker Sticker</div>
+                        <div class="item-source">Sticker • Rainmaker</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_storm_cloud">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/e/e2/StormCloudHat.png/250px-StormCloudHat.png?c7caa1" alt="Storm Cloud" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Storm Cloud</div>
+                        <div class="item-source">Hat • Rainmaker</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_witch_hunter_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/6/61/WitchHunterSticker.png/250px-WitchHunterSticker.png?748657" alt="Witch Hunter Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Witch Hunter Sticker</div>
+                        <div class="item-source">Sticker • Witch Hunter</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_pitchfork">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/1/1c/Pitchfork.png/250px-Pitchfork.png?faa00c" alt="Pitchfork" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Pitchfork</div>
+                        <div class="item-source">Backpack • Witch Hunter</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_caddish_chapeau">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/5/59/CaddishChapeau.png/250px-CaddishChapeau.png?e92d45" alt="Caddish Chapeau" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Caddish Chapeau</div>
+                        <div class="item-source">Hat • Witch Hunter</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_multislacker_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/3/3e/MultislackerSticker.png/250px-MultislackerSticker.png?47a97b" alt="Multislacker Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Multislacker Sticker</div>
+                        <div class="item-source">Sticker • Multislacker</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_multislacker_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/6/68/Multislacker%27sHat.png/250px-Multislacker%27sHat.png?722c68" alt="Multislacker's Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Multislacker's Hat</div>
+                        <div class="item-source">Hat • Multislacker</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_major_player_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/2/22/MajorPlayerSticker.png/250px-MajorPlayerSticker.png?2253d8" alt="Major Player Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Major Player Sticker</div>
+                        <div class="item-source">Sticker • Major Player</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_saxophone">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/e/eb/Saxophone.png/250px-Saxophone.png?35585f" alt="Saxophone" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Saxophone</div>
+                        <div class="item-source">Backpack • Major Player</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_solemn_rose">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/4/4f/Rose.png/250px-Rose.png?406798" alt="Solemn Rose" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Solemn Rose</div>
+                        <div class="item-source">Glasses • Major Player</div>
+                    </div>
+                    <span class="rarity-badge legendary">Legendary</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_plutocrat_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/4/45/PlutocratSticker.png/250px-PlutocratSticker.png?4a5332" alt="Plutocrat Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Plutocrat Sticker</div>
+                        <div class="item-source">Sticker • Plutocrat</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_brain_freeze">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/2/25/PlutocratHatReward.png/250px-PlutocratHatReward.png?4513eb" alt="Brain Freeze" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Brain Freeze</div>
+                        <div class="item-source">Hat • Plutocrat</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_chainsaw_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/c/c2/ChainsawConsultantSticker.png/250px-ChainsawConsultantSticker.png?11c62d" alt="Chainsaw Consultant Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Chainsaw Consultant Sticker</div>
+                        <div class="item-source">Sticker • Chainsaw Consultant</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_chainsaw_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/f/fe/ChainsawConsultant_Hat.png/250px-ChainsawConsultant_Hat.png?348040" alt="Chainsaw Consultant's Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Chainsaw Consultant's Hat</div>
+                        <div class="item-source">Hat • Chainsaw Consultant</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_pacesetter_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/2/23/PacesetterSticker.png/250px-PacesetterSticker.png?156711" alt="Pacesetter Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Pacesetter Sticker</div>
+                        <div class="item-source">Sticker • Pacesetter</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_pacesetter_glasses">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/b/b6/Pacesetter_Glasses.png/250px-Pacesetter_Glasses.png?231782" alt="Pacesetter's Glasses" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Pacesetter's Glasses</div>
+                        <div class="item-source">Glasses • Pacesetter</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_shredder">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/8/8e/THE_SHREDDER.png/250px-THE_SHREDDER.png?e88795" alt="The Shredder" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">The Shredder</div>
+                        <div class="item-source">Backpack • Pacesetter</div>
+                    </div>
+                    <span class="rarity-badge legendary">Legendary</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Litigation Team Loot -->
+        <div class="category" data-category="litigation">
+            <div class="category-header" onclick="toggleCategory('litigation')">
+                <div class="category-header-left">
+                    <h2>⚖️ Litigation Team Loot</h2>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <span class="category-progress" id="litigation-progress">0/12</span>
+            </div>
+            <div class="category-content">
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_litigator_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/0/04/LitigatorSticker.png/250px-LitigatorSticker.png?3ccecc" alt="Litigator Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Litigator Sticker</div>
+                        <div class="item-source">Sticker • Litigator</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_lawbot_suit_top">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/6/69/LawbotShirt.png/250px-LawbotShirt.png?fffaf1" alt="Lawbot Suit Top" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Lawbot Suit Top</div>
+                        <div class="item-source">Shirt • Litigator</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_lawbot_suit_pants">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/4/4e/LawbotPants.png/250px-LawbotPants.png?94bc12" alt="Lawbot Suit Pants" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Lawbot Suit Pants</div>
+                        <div class="item-source">Shorts • Litigator</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_stenographer_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/a/a8/StenographerSticker.png/250px-StenographerSticker.png?2e9f71" alt="Stenographer Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Stenographer Sticker</div>
+                        <div class="item-source">Sticker • Stenographer</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_diploma_bow">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/b/bc/DiplomaBow.png/250px-DiplomaBow.png?90bab4" alt="Diploma Bow" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Diploma Bow</div>
+                        <div class="item-source">Hat • Stenographer</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_gavel_backpack">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/a/ab/GavelBackpack.png/250px-GavelBackpack.png?8641fe" alt="Gavel Backpack" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Gavel Backpack</div>
+                        <div class="item-source">Backpack • Stenographer</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_case_manager_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/0/0c/CaseManagerSticker.png/250px-CaseManagerSticker.png?28d576" alt="Case Manager Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Case Manager Sticker</div>
+                        <div class="item-source">Sticker • Case Manager</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_book_of_law">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/2/27/TheBookOfLaw.png/250px-TheBookOfLaw.png?8ba2b1" alt="The Book of Law" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">The Book of Law</div>
+                        <div class="item-source">Backpack • Case Manager</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_metallic_bowtie">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/5/51/ChiefJusticeBowtie.png/250px-ChiefJusticeBowtie.png?ce6254" alt="Metallic Bowtie" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Metallic Bowtie</div>
+                        <div class="item-source">Backpack • Case Manager</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_scapegoat_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/1/1c/ScapegoatSticker.png/250px-ScapegoatSticker.png?dcac94" alt="Scapegoat Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Scapegoat Sticker</div>
+                        <div class="item-source">Sticker • Scapegoat</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_backstab">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/0/0d/TheBackstab.png/250px-TheBackstab.png?822501" alt="The Backstab" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">The Backstab</div>
+                        <div class="item-source">Backpack • Scapegoat</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_lawbot_bowtie">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/0/00/LawbotSuitBowtie.png/250px-LawbotSuitBowtie.png?25af50" alt="Lawbot Suit Bowtie" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Lawbot Suit Bowtie</div>
+                        <div class="item-source">Backpack • Scapegoat</div>
+                    </div>
+                    <span class="rarity-badge very-rare">Very Rare</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- April Toons Event - High Roller -->
+        <div class="category" data-category="high-roller">
+            <div class="category-header" onclick="toggleCategory('high-roller')">
+                <div class="category-header-left">
+                    <h2>🎲 April Toons - High Roller</h2>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <span class="category-progress" id="high-roller-progress">0/10</span>
+            </div>
+            <div class="category-content">
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_high_roller_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/d/de/HighRollerSticker.png/250px-HighRollerSticker.png?e5c681" alt="High Roller Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">High Roller Sticker</div>
+                        <div class="item-source">Sticker • 1 High Roller Defeat</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_low_baller_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/e/e2/LowBallerHat.png/250px-LowBallerHat.png?ed2f3e" alt="Low Baller Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Low Baller Hat</div>
+                        <div class="item-source">Hat • 2 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_low_baller_glasses">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/f/fc/LowBallerGlasses.png/250px-LowBallerGlasses.png?b0cb44" alt="Low Baller Glasses" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Low Baller Glasses</div>
+                        <div class="item-source">Glasses • 3 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_dice_roll_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/1/13/DiceSticker.png/250px-DiceSticker.png?893724" alt="Dice Roll Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Dice Roll Sticker</div>
+                        <div class="item-source">Sticker • 5 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_high_roller_suit">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/e/e3/HighRollersSuit.png/250px-HighRollersSuit.png?997b08" alt="High Roller's Suit" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">High Roller's Suit</div>
+                        <div class="item-source">Outfit • 7 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_high_roller_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/7/7d/HighRollerHatREAL.gif/250px-HighRollerHatREAL.gif?51168b" alt="High Roller's Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">High Roller's Hat</div>
+                        <div class="item-source">Hat • 10 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_game_show_bg">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/c/c6/GameShowBackground.png/250px-GameShowBackground.png?f93bd4" alt="Game Show Background" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Game Show Background</div>
+                        <div class="item-source">Profile Background • 11 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_low_ballers_sticker">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/d/d0/Low_Ballers_Sticker.png/250px-Low_Ballers_Sticker.png?c0215b" alt="Low Ballers Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Low Ballers Sticker</div>
+                        <div class="item-source">Sticker • 12 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_game_show_nameplate">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/8/82/GameShowNameplate.png/250px-GameShowNameplate.png?456759" alt="Game Show Nameplate" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Game Show Nameplate</div>
+                        <div class="item-source">Profile Nameplate • 13 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_prodigal_suit">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/e/e9/HighRollersProdigalSuit.png/250px-HighRollersProdigalSuit.png?55b0a9" alt="High Roller's Prodigal Suit" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">High Roller's Prodigal Suit</div>
+                        <div class="item-source">Outfit • 15 High Roller Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- April Toons Event - Unstable Cogs Defeats -->
+        <div class="category" data-category="unstable-defeats">
+            <div class="category-header" onclick="toggleCategory('unstable-defeats')">
+                <div class="category-header-left">
+                    <h2>⚙️ April Toons - Unstable Cogs (Defeats)</h2>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <span class="category-progress" id="unstable-defeats-progress">0/10</span>
+            </div>
+            <div class="category-content">
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_paint_mixer">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/5/5c/PaintMixerBackground.png/250px-PaintMixerBackground.png?cec49c" alt="Paint Mixer" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Paint Mixer</div>
+                        <div class="item-source">Profile Background • 5 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_sellbot_paint">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/9/99/SellbotPaintNameplate.png/250px-SellbotPaintNameplate.png?a453f7" alt="Sellbot Paint" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Sellbot Paint</div>
+                        <div class="item-source">Profile Nameplate • 10 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_cog_emblem_set">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/2/25/CogEmblemStickers.png/250px-CogEmblemStickers.png?c65ede" alt="Cog Emblem Sticker Set" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Cog Emblem Sticker Set</div>
+                        <div class="item-source">Sticker Set • 15 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_factory_gear">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/a/ab/FactoryGearBackpackR.gif/250px-FactoryGearBackpackR.gif?cce22f" alt="Factory Gear Backpack" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Factory Gear Backpack</div>
+                        <div class="item-source">Backpack • 25 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_cog_bucket_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/3/30/CogBucketHat.png/250px-CogBucketHat.png?d413f0" alt="Cog Bucket Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Cog Bucket Hat</div>
+                        <div class="item-source">Hat • 35 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_foreman_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/c/c3/FactoryForemanHat.png/250px-FactoryForemanHat.png?277c81" alt="Factory Foreman Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Factory Foreman Hat</div>
+                        <div class="item-source">Sticker • 45 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_frustrated_foreman">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/5/58/FrustratedForemanSticker.png/250px-FrustratedForemanSticker.png?a09264" alt="Frustrated Foreman Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Frustrated Foreman Sticker</div>
+                        <div class="item-source">Sticker • 55 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_pondering_supervisor">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/5/5b/Pondering_Supervisor_Sticker.png/250px-Pondering_Supervisor_Sticker.png?beb20f" alt="Pondering Supervisor Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Pondering Supervisor Sticker</div>
+                        <div class="item-source">Sticker • 70 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_objecting_attorney">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/e/ee/Objecting_Attorney_Sticker.png/250px-Objecting_Attorney_Sticker.png?660f10" alt="Objecting Attorney Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Objecting Attorney Sticker</div>
+                        <div class="item-source">Sticker • 85 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_smug_president">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/9/92/Smug_President_Sticker.png/250px-Smug_President_Sticker.png?167d2e" alt="Smug President Sticker" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Smug President Sticker</div>
+                        <div class="item-source">Sticker • 100 Unstable Cog Defeats</div>
+                    </div>
+                    <span class="rarity-badge defeats">Defeats</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- April Toons Event - Unstable Cogs Random -->
+        <div class="category" data-category="unstable-random">
+            <div class="category-header" onclick="toggleCategory('unstable-random')">
+                <div class="category-header-left">
+                    <h2>🎩 April Toons - Unstable Cogs (Random)</h2>
+                    <span class="dropdown-arrow">▼</span>
+                </div>
+                <span class="category-progress" id="unstable-random-progress">0/5</span>
+            </div>
+            <div class="category-content">
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_yellow_hardhat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/6/66/YellowGoonHardhat.png/250px-YellowGoonHardhat.png?c99bde" alt="Yellow Goon Hardhat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Yellow Goon Hardhat</div>
+                        <div class="item-source">Hat • Unstable Cogs</div>
+                    </div>
+                    <span class="rarity-badge uncommon">Uncommon</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_orange_hardhat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/c/c9/OrangeGoonHardhat.png/250px-OrangeGoonHardhat.png?702537" alt="Orange Goon Hardhat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Orange Goon Hardhat</div>
+                        <div class="item-source">Hat • Unstable Cogs</div>
+                    </div>
+                    <span class="rarity-badge uncommon">Uncommon</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_red_hardhat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/9/9a/RedGoonHardhat.png/250px-RedGoonHardhat.png?b95c28" alt="Red Goon Hardhat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Red Goon Hardhat</div>
+                        <div class="item-source">Hat • Unstable Cogs</div>
+                    </div>
+                    <span class="rarity-badge uncommon">Uncommon</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_purple_hardhat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/9/94/PurpleGoonHardhat.png/250px-PurpleGoonHardhat.png?9aa52f" alt="Purple Goon Hardhat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Purple Goon Hardhat</div>
+                        <div class="item-source">Hat • Unstable Cogs</div>
+                    </div>
+                    <span class="rarity-badge uncommon">Uncommon</span>
+                </div>
+                <div class="drop-item">
+                    <input type="checkbox" id="drop_security_hat">
+                    <img src="https://corporateclash.wiki.gg/images/thumb/a/a2/SecurityGoonHat.png/250px-SecurityGoonHat.png?1ac605" alt="Security Goon Hat" class="item-image">
+                    <div class="item-details">
+                        <div class="item-name">Security Goon Hat</div>
+                        <div class="item-source">Hat • Unstable Cogs</div>
+                    </div>
+                    <span class="rarity-badge uncommon">Uncommon</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let allDrops = [];
+        
+        // Initialize the tracker
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDrops();
+            loadProgress();
+            loadCategoryStates();
+            setupEventListeners();
+            updateAllProgress();
+        });
+
+        function initializeDrops() {
+            allDrops = Array.from(document.querySelectorAll('input[type="checkbox"]'));
+        }
+
+        function setupEventListeners() {
+            // Checkbox change events
+            allDrops.forEach(checkbox => {
+                checkbox.addEventListener('change', function() {
+                    toggleCompleted(this);
+                    saveProgress();
+                    updateAllProgress();
+                });
+            });
+
+            // Search functionality
+            document.getElementById('searchBox').addEventListener('input', function(e) {
+                const searchTerm = e.target.value.toLowerCase();
+                const categories = document.querySelectorAll('.category');
+                
+                categories.forEach(category => {
+                    const dropItems = category.querySelectorAll('.drop-item');
+                    let hasVisibleItems = false;
+                    
+                    dropItems.forEach(item => {
+                        const text = item.textContent.toLowerCase();
+                        if (text.includes(searchTerm)) {
+                            item.style.display = 'flex';
+                            hasVisibleItems = true;
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                    
+                    // Hide/show entire category based on search results
+                    if (searchTerm === '' || hasVisibleItems) {
+                        category.style.display = 'block';
+                    } else {
+                        category.style.display = 'none';
+                    }
+                });
+            });
+
+            // Handle image loading errors
+            document.querySelectorAll('.item-image').forEach(img => {
+                img.onerror = function() {
+                    this.style.display = 'none';
+                };
+            });
+        }
+
+        function toggleCategory(categoryId) {
+            const category = document.querySelector(`[data-category="${categoryId}"]`);
+            if (!category) return;
+            
+            category.classList.toggle('collapsed');
+            saveCategoryStates();
+        }
+
+        function saveCategoryStates() {
+            const states = {};
+            document.querySelectorAll('.category').forEach(category => {
+                const categoryId = category.getAttribute('data-category');
+                states[categoryId] = category.classList.contains('collapsed');
+            });
+            localStorage.setItem('ttccCategoryStates', JSON.stringify(states));
+        }
+
+        function loadCategoryStates() {
+            const saved = localStorage.getItem('ttccCategoryStates');
+            if (saved) {
+                const states = JSON.parse(saved);
+                Object.keys(states).forEach(categoryId => {
+                    const category = document.querySelector(`[data-category="${categoryId}"]`);
+                    if (category && states[categoryId]) {
+                        category.classList.add('collapsed');
+                    }
+                });
+            }
+        }
+
+        function toggleCompleted(checkbox) {
+            const dropItem = checkbox.closest('.drop-item');
+            if (checkbox.checked) {
+                dropItem.classList.add('completed');
+            } else {
+                dropItem.classList.remove('completed');
+            }
+        }
+
+        function saveProgress() {
+            const progress = {};
+            allDrops.forEach(cb => {
+                progress[cb.id] = cb.checked;
+            });
+            localStorage.setItem('ttccDropProgress', JSON.stringify(progress));
+        }
+
+        function loadProgress() {
+            const saved = localStorage.getItem('ttccDropProgress');
+            if (saved) {
+                const progress = JSON.parse(saved);
+                Object.keys(progress).forEach(id => {
+                    const checkbox = document.getElementById(id);
+                    if (checkbox) {
+                        checkbox.checked = progress[id];
+                        toggleCompleted(checkbox);
+                    }
+                });
+            }
+        }
+
+        function updateAllProgress() {
+            // Update overall progress
+            const completed = allDrops.filter(cb => cb.checked).length;
+            const total = allDrops.length;
+            const percentage = total > 0 ? Math.round((completed / total) * 100) : 0;
+            
+            document.getElementById('progressDisplay').innerHTML = `
+                <div class="main-progress">${completed}/${total} Items (${percentage}%)</div>
+                <div class="breakdown">${getProgressBreakdown()}</div>
+            `;
+
+            // Update category progress
+            updateCategoryProgress('makeship', 14);
+            updateCategoryProgress('street', 19);
+            updateCategoryProgress('kudos', 19);
+            updateCategoryProgress('litigation', 12);
+            updateCategoryProgress('high-roller', 10);
+            updateCategoryProgress('unstable-defeats', 10);
+            updateCategoryProgress('unstable-random', 5);
+        }
+
+        function updateCategoryProgress(category, total) {
+            const categoryElement = document.querySelector(`[data-category="${category}"]`);
+            if (!categoryElement) return;
+            
+            const checkboxes = categoryElement.querySelectorAll('input[type="checkbox"]');
+            const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+            
+            const progressElement = document.getElementById(`${category}-progress`);
+            if (progressElement) {
+                progressElement.textContent = `${completed}/${total}`;
+            }
+        }
+
+        function getProgressBreakdown() {
+            const categories = [
+                { name: 'Makeship', selector: '[data-category="makeship"]', total: 14 },
+                { name: 'Street Managers', selector: '[data-category="street"]', total: 19 },
+                { name: 'Kudos Managers', selector: '[data-category="kudos"]', total: 19 },
+                { name: 'Litigation Team', selector: '[data-category="litigation"]', total: 12 },
+                { name: 'High Roller', selector: '[data-category="high-roller"]', total: 10 },
+                { name: 'Unstable Defeats', selector: '[data-category="unstable-defeats"]', total: 10 },
+                { name: 'Unstable Random', selector: '[data-category="unstable-random"]', total: 5 }
+            ];
+            
+            return categories.map(cat => {
+                const element = document.querySelector(cat.selector);
+                if (!element) return `${cat.name}: 0/${cat.total}`;
+                
+                const checkboxes = element.querySelectorAll('input[type="checkbox"]');
+                const completed = Array.from(checkboxes).filter(cb => cb.checked).length;
+                return `${cat.name}: ${completed}/${cat.total}`;
+            }).join(' • ');
+        }
+
+        function exportProgress() {
+            const progress = localStorage.getItem('ttccDropProgress');
+            const categoryStates = localStorage.getItem('ttccCategoryStates');
+            
+            const exportData = {
+                progress: progress ? JSON.parse(progress) : {},
+                categoryStates: categoryStates ? JSON.parse(categoryStates) : {}
+            };
+            
+            const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = 'ttcc-drop-progress.json';
+            a.click();
+            URL.revokeObjectURL(url);
+        }
+
+        function importProgress() {
+            const input = document.createElement('input');
+            input.type = 'file';
+            input.accept = '.json';
+            input.onchange = function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        try {
+                            const data = JSON.parse(e.target.result);
+                            
+                            // Handle both old format (just progress) and new format (progress + category states)
+                            if (data.progress) {
+                                localStorage.setItem('ttccDropProgress', JSON.stringify(data.progress));
+                                if (data.categoryStates) {
+                                    localStorage.setItem('ttccCategoryStates', JSON.stringify(data.categoryStates));
+                                }
+                            } else {
+                                // Old format - just progress data
+                                localStorage.setItem('ttccDropProgress', JSON.stringify(data));
+                            }
+                            
+                            location.reload();
+                        } catch (error) {
+                            alert('Invalid file format!');
+                        }
+                    };
+                    reader.readAsText(file);
+                }
+            };
+            input.click();
+        }
+
+        function resetProgress() {
+            if (confirm('Are you sure you want to reset ALL progress? This cannot be undone!')) {
+                localStorage.removeItem('ttccDropProgress');
+                localStorage.removeItem('ttccCategoryStates');
+                location.reload();
+            }
+        }
+    </script>
+</body>
+</html>
