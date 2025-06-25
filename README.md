@@ -95,8 +95,7 @@ open index.html
 - Duck Shuffler Background
 - 4 Exclusive Stickers
 - 7 Clothing Items
-- *All guaranteed from Makeship purchase*
-
+  
 </details>
 
 <details>
@@ -119,6 +118,7 @@ open index.html
 - Major Player Saxophone
 - **Legendary Solemn Rose** 🌹
 - **Legendary Shredder Backpack** ⚡
+- And more...
 
 </details>
 
